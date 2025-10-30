@@ -1,0 +1,34 @@
+@startuml
+!include <C4/C4_Context>
+
+Person(customer, "Клиент")
+Person(frontOfficeManager, "Менеджер фронт-офиса")
+
+System(website, "Сайт банка")
+System(internetBank, "Интернет-банк")
+System(creditPipeline, "Кредитный конвейер")
+System(creditScore, "Система кредитного скоринга")
+System(cbs, "АБС")
+
+System_Ext(smsGateway, "СМС-шлюз")
+System_Ext(creditHistoryBureau, "Бюро кредитных историй")
+
+Rel(customer, website, "Подаёт заявку на кредит")
+Rel(customer, internetBank, "Подаёт заявку или принимает предодобренное предложение")
+
+Rel(customer, frontOfficeManager, "Подаёт заявку на кредит")
+Rel(frontOfficeManager, cbs, "Оформляет заявку на кредит клиента")
+
+Rel(website, creditPipeline, "Передаёт заявку и получает предварительное решение")
+Rel(internetBank, creditPipeline, "Передаёт заявку и получает статус")
+
+Rel(creditPipeline, cbs, "Получает заявки и передаёт результаты раз в сутки")
+Rel(creditPipeline, creditScore, "Запрашивает скоринг по клиенту (онлайн)")
+Rel(creditScore, creditPipeline, "Передаёт предодобренные предложения (каждую ночь)")
+Rel(creditScore, cbs, "Запрашивает данные для формирования преодобренных кредитов")
+Rel(creditPipeline, creditHistoryBureau, "Запрашивает данные о кредитной истории")
+
+Rel(internetBank, smsGateway, "Уведомляет клиента об изменении статуса заявки")
+Rel(cbs, smsGateway, "Отправляет СМС при зачислении средств")
+Rel(smsGateway, customer, "Отправляет СМС")
+@enduml

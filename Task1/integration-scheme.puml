@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Context>
+
+Person(customer, "Клиент")
+
+Person(frontOfficeManager, "Менеджер фронт-офиса")
+Person(depositManager, "Менеджер по вкладам")
+Person(creditManager, "Менеджер по кредитам")
+Person(callCenterManager, "Менеджер колл-центра")
+
+System(cbs, "АБС")
+System(callCenter, "Колл-центр")
+System(creditPipeline, "Кредитный конвейер")
+System(creditScoring, "Кредитный скоринг")
+System(internetBank, "Интернет-банк")
+
+Rel(callCenterManager, callCenter, "Заявка на вклад")
+Rel(callCenter, cbs, "Заявка на вклад")
+
+Rel(frontOfficeManager, cbs, "Кредитная заявка")
+Rel(depositManager, cbs, "Заявка на вклад")
+Rel(creditManager, cbs, "Кредитная заявка")
+Rel(creditManager, creditPipeline, "Кредитная заявка")
+Rel(creditManager, creditScoring, "Кредитная заявка")
+
+Rel(internetBank, cbs, "Платежи")
+
+Rel(customer, internetBank, "Платежи")
+Rel(customer, frontOfficeManager, "Кредитная или депозитная заявка")
+Rel(customer, callCenterManager, "Заявка на вклад")
+
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Context>
+
+Person(customer, "Клиент")
+Person(frontOfficeManager, "Менеджер фронт-офиса")
+Person(creditManager, "Менеджер по кредитам")
+
+System(abs, "АБС")
+System(creditPipeline, "Кредитный конвейер")
+System(creditScoring, "Кредитный скоринг")
+
+System_Ext(creditHistory, "Бюро кредитных историй")
+
+Rel(customer, frontOfficeManager, "Подает заявку на кредит")
+Rel(frontOfficeManager, abs, "Добавляет кредитную заявку")
+
+Rel(creditPipeline, abs, "Синхронизирует кредитные заявки")
+
+Rel(creditManager, creditPipeline, "Обрабатывает кредитные заявки")
+Rel(creditPipeline, creditScoring, "Использует для кредитного скоринга")
+
+Rel(creditScoring, creditHistory, "Использует для оценки клиента")
+Rel(creditScoring, abs, "Использует для оценки клиента")
+
+@enduml

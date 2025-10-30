@@ -1,0 +1,28 @@
+@startuml
+!include <C4/C4_Container>
+
+Person(customer, "Клиент")
+Person(creditManager, "Менеджер кредитного отдела")
+
+Container(internetBank, "Интернет-банк", "ASP.NET MVC")
+Container(website, "Сайт", "PHP + Laravel")
+Container(creditPipeline, "Кредитный конвейер", "Java + Camunda BPM", "Управляет процессами обработки заявок")
+System(creditScore, "Система кредитного скоринга", "Python + Flask + PostgreSQL")
+
+System(cbs, "АБС", "Delphi + Oracle")
+
+System_Ext(smsGateway, "СМС-шлюз", "HTTP API")
+System_Ext(creditHistoryBureau, "Бюро кредитных историй")
+
+Rel(customer, internetBank, "Подаёт заявку на кредит")
+Rel(customer, website, "Подаёт заявку на кредит")
+
+Rel(website, creditPipeline, "Создаёт заявку через REST API")
+Rel(internetBank, creditPipeline, "Создаёт заявку через REST API")
+
+Rel(creditPipeline, creditScore, "Запрашивает скоринг по клиенту")
+Rel(creditPipeline, creditHistoryBureau, "Получает данные кредитной истории")
+Rel(creditManager, creditPipeline, "Работает с задачами Camunda")
+Rel(cbs, smsGateway, "Отправляет СМС при зачислении кредита")
+Rel(creditPipeline, smsGateway, "Отправляет уведомления об изменении статуса")
+@enduml

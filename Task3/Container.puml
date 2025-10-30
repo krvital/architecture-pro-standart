@@ -1,0 +1,46 @@
+@startuml
+!include <C4/C4_Container>
+
+Person(customer, "Клиент")
+Container(website, "Сайт банка", "PHP + Laravel")
+
+Boundary(internetBank, "Интернет-банк") {
+    Container(ibGateway, "Router", "nginx")
+    Container(ibFrontend, "Frontend", "TS + React")
+    Container(ibBackend, "Backend", "ASP.NET MVC")
+    ContainerDb(ibDb, "БД", "MSSQL")
+
+    Rel(ibGateway, ibFrontend, "")
+    Rel(ibGateway, ibBackend, "")
+    Rel(ibFrontend, ibBackend, "")
+    Rel(ibBackend, ibDb, "")
+}
+
+Container(cbs, "АБС", "Delphi + Oracle")
+
+Boundary(callCenter, "Кол-центр") {
+    Person(callCenterManager, "Менеджер")
+    Container(callCenterApp, "Система\nкол-центра")
+    Rel(callCenterManager, callCenterApp, "Обрабатывает заявки кол-центра")
+    Rel(callCenterApp, cbs, "Отправляет заявку на открытие депозита")
+}
+
+ContainerQueue(mq, "Очередь", "RabbitMQ")
+
+System_Ext(smsGateway, "СМС-шлюз")
+
+Rel(customer, website, "Подаёт заявку на депозит")
+Rel(website, mq, "Сохраняет заявку в система кол-центра")
+Rel(callCenterApp, mq, "Получает список заявок")
+
+Rel(customer, internetBank, "Использует")
+
+Rel(internetBank, smsGateway, "Уведомляет клиента о получении заявки на открытие счёта")
+Rel(internetBank, cbs, "Передаёт заявку на открытие депозита")
+Rel(cbs, smsGateway, "Уведомляет клиента об открытии депозитного счёта")
+
+Rel(smsGateway, customer, "Отправляет СМС-клиенту")
+
+Lay_L(customer, website)
+
+@enduml
