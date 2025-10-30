@@ -1,0 +1,28 @@
+@startuml
+!include <C4/C4_Context>
+
+Person(customer, "Клиент")
+Person(callCenterManager, "Сотрудник кол-центра")
+
+System(website, "Сайт банка")
+System(internetBank, "Интернет-банк")
+
+System(cbs, "АБС")
+System(callCenter, "Система кол-центра")
+
+System_Ext(smsGateway, "СМС-шлюз")
+
+Rel(customer, website, "Подаёт заявку на депозит")
+Rel(website, callCenter, "Сохраняет заявку в система кол-центра")
+Rel(callCenterManager, callCenter, "Обрабатывает заявки кол-центра")
+
+Rel(callCenter, cbs, "Оформляет заявку на депозит")
+
+Rel(customer, internetBank, "Использует")
+
+Rel(internetBank, smsGateway, "Уведомляет клиента о получении заявки на открытие счёта")
+Rel(cbs, smsGateway, "Уведомляет клиента об открытии депозитного счёта")
+
+Rel(smsGateway, customer, "Отправляет СМС-клиенту")
+
+@enduml
