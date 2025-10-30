@@ -1,0 +1,33 @@
+@startuml
+!include <C4/C4_Container>
+
+Person(customer, "Клиент")
+
+Boundary(callCenter, "Кол-центр") {
+    Person(callCenterManager, "Оператор")
+    Container(callCenterApp, "Система кол-центра")
+    Rel(callCenterManager, callCenterApp, "Получает информацию о текущих ставках")
+}
+
+System_Ext(extCallCenter, "Партнёрский кол-центр")
+System_Ext(centralBankRateService, "Внешний сервис с ключевой ставкой ЦБ")
+
+Boundary(internetBank, "Интернет-банк") {
+    Boundary(ibBackend, "Backend") {
+        Container(ibApp, "API для получения текущих ставок") 
+    }
+    Container(ibFtp, "FTP сервер")
+}
+
+System(cbs, "АБС")
+
+Rel(ibBackend, cbs, "Получает данные необходимые для рассчёта ключевой ставки")
+Rel(ibBackend, centralBankRateService, "Получает значение ключевой ставки")
+
+Rel(customer, callCenterManager, "Консультируется по поводу ставок")
+Rel(customer, extCallCenter, "Консультируется по поводу ставок")
+
+Rel(callCenterApp, ibApp, "Получает информацию о текущих ставках по API")
+Rel(extCallCenter, ibFtp, "Получает информацию о текущих ставках по FTP")
+
+@enduml

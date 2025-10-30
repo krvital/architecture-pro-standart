@@ -1,0 +1,15 @@
+@startuml
+!include <C4/C4_Context>
+
+Person(customer, "Клиент")
+System(callCenter, "Кол-центр")
+System_Ext(extCallCenter, "Партнёрский кол-центр")
+
+System(internetBank, "Интернет-банк")
+
+Rel(customer, callCenter, "Консультируется по поводу ставок")
+Rel(customer, extCallCenter, "Консультируется по поводу ставок")
+
+Rel(callCenter, internetBank, "Получает информацию о текущих ставках")
+Rel(extCallCenter, internetBank, "Получает информацию о текущих ставках")
+@enduml
