@@ -1,0 +1,27 @@
+@startuml
+!include <C4/C4_Context>
+
+Person(customer, "Клиент")
+Person(frontOfficeManager, "Менеджер фронт-офиса")
+Person(depositManager, "Менеджер по вкладам")
+Person(creditManager, "Менеджер по кредитам")
+Person(callCenterManager, "Менеджер колл-центра")
+
+System(abs, "АБС")
+System(callCenter, "Колл-центр")
+System_Ext(smsGateway, "SMS-шлюз")
+
+Rel(customer, callCenterManager, "Подает заявку на вклад")
+Rel(customer, frontOfficeManager, "Подает заявку на вклад")
+
+Rel(callCenterManager, callCenter, "Создает заявку на вклад")
+Rel(callCenter, abs, "Сохраняет заявку на вклад")
+
+Rel(abs, smsGateway, "Уведомляет клиента о вкладе")
+Rel(smsGateway, customer, "Уведомляет клиента о вкладе")
+
+Rel(frontOfficeManager, depositManager, "Направляет письмо о заявке на вклад")
+Rel(depositManager, creditManager, "Направляет письмо о заявке на вклад")
+Rel(creditManager, abs, "Использует АБС для расчета кредитного риска")
+
+@enduml
